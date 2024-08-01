@@ -83,4 +83,19 @@ public class EmployeeDao {
           
         return list;  
     } 
+	
+	public static int delete(int id){  
+        int status=0;  
+        try{  
+            Connection con=EmployeeDao.getConnection();  
+            PreparedStatement ps=con.prepareStatement("delete from employee where id=?");  
+            ps.setInt(1,id);  
+            status=ps.executeUpdate();  
+              
+            con.close();
+            ps.close();
+        }catch(Exception e){e.printStackTrace();}  
+          
+        return status;  
+    }
 }
