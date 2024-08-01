@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.soudassi.bean.Employee;
 
@@ -58,4 +60,27 @@ public class EmployeeDao {
           
         return status;  
     }
+	
+	public static List<Employee> getAllEmployees(int start,int total){  
+        List<Employee> list=new ArrayList<Employee>();  
+          
+        try{  
+            Connection con = EmployeeDao.getConnection();  
+            PreparedStatement ps=con.prepareStatement("select * from employee limit "+(start-1)+","+total);  
+            ResultSet rs=ps.executeQuery();  
+            while(rs.next()){  
+            	Employee e=new Employee();  
+                e.setId(rs.getInt(1));  
+                e.setName(rs.getString(2));  
+                e.setPassword(rs.getString(3));  
+                e.setEmail(rs.getString(4));  
+                e.setCountry(rs.getString(5));  
+                list.add(e);  
+            }  
+            con.close();
+            ps.close();
+        }catch(Exception e){e.printStackTrace();}  
+          
+        return list;  
+    } 
 }
