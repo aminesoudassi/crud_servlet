@@ -98,4 +98,47 @@ public class EmployeeDao {
           
         return status;  
     }
+	
+	 public static Employee getEmployeeById(int id){  
+		 Employee e=new Employee();  
+	          
+	        try{  
+	            Connection con=EmployeeDao.getConnection();  
+	            PreparedStatement ps=con.prepareStatement("select * from employee where id=?");  
+	            ps.setInt(1,id);  
+	            ResultSet rs=ps.executeQuery();  
+	            if(rs.next()){  
+	                e.setId(rs.getInt(1));  
+	                e.setName(rs.getString(2));  
+	                e.setPassword(rs.getString(3));  
+	                e.setEmail(rs.getString(4));  
+	                e.setCountry(rs.getString(5));  
+	            }  
+	            con.close();
+	            ps.close();
+	        }catch(Exception ex){ex.printStackTrace();}  
+	          
+	        return e;  
+	    }
+	 
+	 public static int update(Employee e){  
+	        int status=0;  
+	        try{  
+	            Connection con=EmployeeDao.getConnection();  
+	            PreparedStatement ps=con.prepareStatement(  
+	                         "update employee set name=?,password=?,email=?,country=? where id=?");  
+	            ps.setString(1,e.getName());  
+	            ps.setString(2,e.getPassword());  
+	            ps.setString(3,e.getEmail());  
+	            ps.setString(4,e.getCountry());  
+	            ps.setInt(5,e.getId());  
+	              
+	            status=ps.executeUpdate();  
+	              
+	            con.close();
+	            ps.close();
+	        }catch(Exception ex){ex.printStackTrace();}  
+	          
+	        return status;  
+	    }
 }
